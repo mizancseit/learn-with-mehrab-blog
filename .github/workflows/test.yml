@@ -70,6 +70,10 @@ jobs:
 
       - name: Prepare database
         run: |
+          # Wait for MySQL to be ready
+           while ! mysqladmin ping -h127.0.0.1 -ularavel_user -ppassword --silent; do
+              sleep 1
+          done
           php artisan config:clear
           php artisan migrate:fresh 
           php artisan db:seed 
