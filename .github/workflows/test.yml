@@ -71,6 +71,8 @@ jobs:
       - name: Prepare database
         run: |
           mysql --host=127.0.0.1 --user=laravel --password=password laravel_test -e "DROP DATABASE IF EXISTS laravel_test; CREATE DATABASE laravel_test;"
+          mysql --host=127.0.0.1 --user=root --password=root -e "GRANT ALL PRIVILEGES ON laravel_test.* TO 'laravel'@'%'"
+          php artisan config:clear
           php artisan migrate:fresh 
           php artisan db:seed 
 
@@ -82,6 +84,5 @@ jobs:
 
       - name: Execute tests
         run: |
-          php artisan config:clear
           php artisan test --env=testing
 
