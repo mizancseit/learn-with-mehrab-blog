@@ -1,0 +1,120 @@
+name: Build Laravel Application
+
+on:
+  push:
+    branches:
+      - dev         # For Tesing
+      - staging     # For Staging
+      - main        # For Production
+      
+#  workflow_dispatch:
+#    inputs:
+#      enviromnent:
+#        description: "Choose Environment"
+#        required: true
+#        default: dev
+#        type: choice
+#        options:
+#          - dev
+#          - staging
+#          - production
+
+
+
+jobs:
+  build:
+    
+    runs-on: ubuntu-latest
+    environment: ${{github.ref_name}} # automatically set env as branch name
+    # environment: ${{ github.event.inputs.environment }} # for workflow_dispatch
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: ${{secrets.DB_PASSWORD}}
+          MYSQL_DATABASE: ${{secrets.DB_DATABASE}}
+          MYSQL_USER: ${{secrets.DB_USERNAME}}
+          MYSQL_PASSWORD: ${{secrets.DB_PASSWORD}}
+        ports:
+         - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+          
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node js Environment Setup
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+        
+      - name: Install NPM & Build
+        run: |
+         npm ci
+         npm run build
+
+      - name: Setup PHP with PECL extension
+        uses: shivammathur/setup-php@v2
+        with:
+         php-version: '8.3'
+         extensions: mbstring, xml, mysql, pdo, pdo_mysql, bcmath, ctype, fileinfo, json, tokenizer, openssl
+         tools: composer:v2
+
+      - name: Copy .ENV
+        run: |
+          cp .env.testing .env
+
+      - name: Setup Environment Variable
+        run: |
+          echo "DB_CONNECTION=mysql" >> .env
+          echo "DB_HOST=${{secrets.DB_HOST}}" >> .env
+          echo "DB_PORT=${{secrets.DB_PORT}}" >> .env
+          echo "DB_DATABASE=${{secrets.DB_DATABASE}}" >> .env
+          echo "DB_USERNAME=${{secrets.DB_USERNAME}}" >> .env
+          echo "DB_PASSWORD=${{secrets.DB_PASSWORD}}" >> .env
+
+          echo "DB_CONNECTION=mysql" >> .env.testing
+          echo "DB_HOST=${{secrets.DB_HOST}}" >> .env.testing
+          echo "DB_PORT=${{secrets.DB_PORT}}" >> .env.testing
+          echo "DB_DATABASE=${{secrets.DB_DATABASE}}" >> .env.testing
+          echo "DB_USERNAME=${{secrets.DB_USERNAME}}" >> .env.testing
+          echo "DB_PASSWORD=${{secrets.DB_PASSWORD}}" >> .env.testing
+
+
+      - name: Install dependencies
+        run: |
+          composer install --prefer-dist --no-interaction --no-scripts
+          php artisan key:generate
+          php artisan migrate --env=testing
+
+      - name: Execute Category Test
+        run: php artisan test --env=testing
+
+      - name: Prepare Artifact Folder
+        run: |
+          mkdir -p artifact
+          cp -r app bootstrap config database public resources routes storage artisan composer.* .env.testing .env artifact/
+          cp -r vendor node_modules artifact/ # optional if needed in artifact
+
+      - name: Upload Laravel Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: laravel-app-artifact
+          path: artifact
+        
+
+        
+           
+          
+        
+
+      
+
+      
+      
+         
+
+        
+      
