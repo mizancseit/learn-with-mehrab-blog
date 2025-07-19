@@ -1,4 +1,4 @@
-name: Build Laravel Application
+name: Build Laravel With Env
 
 on:
 #  push:
