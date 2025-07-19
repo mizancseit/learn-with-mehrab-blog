@@ -1,23 +1,23 @@
 name: Build Laravel Application
 
 on:
-  push:
-    branches:
-      - dev         # For Tesing
-      - staging     # For Staging
-      - main        # For Production
+#  push:
+#    branches:
+#      - dev         # For Tesing
+#      - staging     # For Staging
+#      - main        # For Production
       
-#  workflow_dispatch:
-#    inputs:
-#      enviromnent:
-#        description: "Choose Environment"
-#        required: true
-#        default: dev
-#        type: choice
-#        options:
-#          - dev
-#          - staging
-#          - production
+  workflow_dispatch:
+    inputs:
+      enviromnent:
+        description: "Choose Environment"
+        required: true
+        default: dev
+        type: choice
+        options:
+          - dev
+          - staging
+          - production
 
 
 
@@ -25,8 +25,8 @@ jobs:
   build:
     
     runs-on: ubuntu-latest
-    environment: ${{github.ref_name}} # automatically set env as branch name
-    # environment: ${{ github.event.inputs.environment }} # for workflow_dispatch
+   # environment: ${{github.ref_name}} # automatically set env as branch name
+    environment: ${{ github.event.inputs.environment }} # for workflow_dispatch
 
     services:
       mysql:
