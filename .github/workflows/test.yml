@@ -1,10 +1,8 @@
 name: Laravel Test Suite
 
 on:
-  push:
-    branches: [ main, develop ]
-  pull_request:
-    branches: [ main, develop ]
+  workflow_dispatch:
+
 
 jobs:
   test:
@@ -84,9 +82,3 @@ jobs:
           php artisan config:clear
           php artisan test --env=testing
 
-      - name: Upload test results
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: test-results
-          path: storage/logs/laravel.log
