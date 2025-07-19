@@ -71,12 +71,12 @@ jobs:
       - name: Prepare database
         run: |
           # Wait for MySQL to be ready
-           while ! mysqladmin ping -h127.0.0.1 -ularavel_user -ppassword --silent; do
+           while ! mysqladmin ping -h127.0.0.1 -ularavel -ppassword --silent; do
               sleep 1
           done
           
           echo "Listing existing tables..."
-          mysql -h127.0.0.1 -ularavel_user -ppassword laravel_test -e "SHOW TABLES;"
+          mysql -h127.0.0.1 -ularavel -ppassword laravel_test -e "SHOW TABLES;"
     
           php artisan config:clear
           php artisan migrate:fresh 
