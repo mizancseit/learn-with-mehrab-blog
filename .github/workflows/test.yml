@@ -74,6 +74,10 @@ jobs:
            while ! mysqladmin ping -h127.0.0.1 -ularavel_user -ppassword --silent; do
               sleep 1
           done
+          
+          echo "Listing existing tables..."
+          mysql -h127.0.0.1 -ularavel_user -ppassword laravel_test -e "SHOW TABLES;"
+    
           php artisan config:clear
           php artisan migrate:fresh 
           php artisan db:seed 
