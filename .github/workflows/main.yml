@@ -55,6 +55,7 @@ jobs:
 
       - name: Run migrations and tests
         run: |
+          php artisan config:clear
           php artisan migrate:fresh --env=testing
           php artisan db:seed --env=testing
           php artisan test
