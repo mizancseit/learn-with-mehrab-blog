@@ -37,7 +37,6 @@ jobs:
       - name: Copy .env
         run: |
           cp .env.testing .env
-          cp .env.testing .env.testing
 
       - name: Setup Environment Variables
         run: |
