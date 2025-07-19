@@ -1,0 +1,10 @@
+@media (max-width: 768px) {
+    .career-path-category-carousel-left, .career-path-category-carousel-right {
+        display: none;
+    }
+
+    .career-path-category-carousel-center {
+        flex: none;
+        width: 100%;
+    }
+}
