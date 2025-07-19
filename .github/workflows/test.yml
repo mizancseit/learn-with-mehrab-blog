@@ -3,7 +3,6 @@ name: Laravel Test Suite
 on:
   workflow_dispatch:
 
-
 jobs:
   test:
     name: Run Laravel Tests
@@ -74,10 +73,13 @@ jobs:
            while ! mysqladmin ping -h127.0.0.1 -ularavel -ppassword --silent; do
               sleep 1
           done
-          
-          echo "Listing existing tables..."
-          mysql -h127.0.0.1 -ularavel -ppassword laravel_test -e "SHOW TABLES;"
-          php artisan migrate
+
+      - name: Debug migration status
+        run: php artisan migrate:status
+  
+         echo "Listing existing tables..."
+         mysql -h127.0.0.1 -ularavel -ppassword laravel_test -e "SHOW TABLES;"
+         php artisan migrate
          
 
       - name: Generate app key
