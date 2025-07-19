@@ -66,6 +66,8 @@ jobs:
         run: |
           composer install --prefer-dist --no-interaction --no-scripts
 
+      - name: Debug migration status
+        run: php artisan migrate:status
 
       - name: Prepare database
         run: |
@@ -73,13 +75,10 @@ jobs:
            while ! mysqladmin ping -h127.0.0.1 -ularavel -ppassword --silent; do
               sleep 1
           done
-
-      - name: Debug migration status
-        run: php artisan migrate:status
   
-         echo "Listing existing tables..."
-         mysql -h127.0.0.1 -ularavel -ppassword laravel_test -e "SHOW TABLES;"
-         php artisan migrate
+          echo "Listing existing tables..."
+          mysql -h127.0.0.1 -ularavel -ppassword laravel_test -e "SHOW TABLES;"
+          php artisan migrate
          
 
       - name: Generate app key
