@@ -67,14 +67,15 @@ jobs:
         run: |
           composer install --prefer-dist --no-interaction --no-scripts
 
-      - name: Generate app key
-        run: php artisan key:generate
 
       - name: Prepare database
         run: |
           mysql --host=127.0.0.1 --user=laravel --password=password laravel_test -e "DROP DATABASE IF EXISTS laravel_test; CREATE DATABASE laravel_test;"
-          php artisan migrate:fresh --env=testing
-          php artisan db:seed --env=testing
+          php artisan migrate:fresh 
+          php artisan db:seed 
+
+      - name: Generate app key
+        run: php artisan key:generate
 
       - name: Run composer scripts
         run: composer run-script post-autoload-dump
