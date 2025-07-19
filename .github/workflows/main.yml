@@ -1,0 +1,63 @@
+name: Build and Deploy Laravel App
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: secret
+          MYSQL_DATABASE: laravel_test
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+        
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+
+      - name: Node Js Environment Setup
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install and Build NPM 
+        run: |
+          npm ci
+          npm run build
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, xml, mysql, pdo, pdo_mysql
+          coverage: none
+
+      - name: Install dependencies
+        run: |
+          composer install --prefer-dist --no-interaction
+          cp .env.testing .env
+          php artisan key:generate
+
+      - name: Prepare environment
+        run: |
+          echo "DB_CONNECTION=mysql" >> .env
+          echo "DB_HOST=127.0.0.1" >> .env
+          echo "DB_PORT=3306" >> .env
+          echo "DB_DATABASE=laravel_test" >> .env
+          echo "DB_USERNAME=root" >> .env
+          echo "DB_PASSWORD=secret" >> .env
+
+      - name: Run migrations and tests
+        run: |
+          php artisan migrate:fresh --env=testing
+          php artisan db:seed --env=testing
+          php artisan test
+
+        
+          
