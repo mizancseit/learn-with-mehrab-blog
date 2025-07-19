@@ -62,13 +62,14 @@ jobs:
           echo "DB_USERNAME=laravel" >> .env.testing
           echo "DB_PASSWORD=password" >> .env.testing
 
-      - name: Generate app key
-        run: php artisan key:generate
 
       - name: Install dependencies
         run: |
           composer install --prefer-dist --no-interaction --no-scripts
           composer dump-autoload
+
+      - name: Generate app key
+        run: php artisan key:generate
 
       - name: Prepare database
         run: |
