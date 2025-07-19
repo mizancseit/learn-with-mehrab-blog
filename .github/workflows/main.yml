@@ -71,6 +71,17 @@ jobs:
       - name: Execute Category Test
         run: php artisan test --env=testing
 
+      - name: Prepare Artifact Folder
+        run: |
+          mkdir -p artifact
+          cp -r app bootstrap config database public resources routes storage artisan composer.* .env.example artifact/
+          cp -r vendor node_modules artifact/ # optional if needed in artifact
+
+      - name: Upload Laravel Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: laravel-app-artifact
+          path: artifact
         
 
         
