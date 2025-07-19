@@ -77,8 +77,8 @@ jobs:
           
           echo "Listing existing tables..."
           mysql -h127.0.0.1 -ularavel -ppassword laravel_test -e "SHOW TABLES;"
-          php artisan migrate:fresh
-          php artisan db:seed
+          php artisan migrate
+         
 
       - name: Generate app key
         run: php artisan key:generate
