@@ -1,0 +1,15 @@
+name: Basic Testing
+
+on:
+  push:
+    branches:
+      - dev
+      - staging
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Steps
+        run: echo "Your branch is - ${{github.ref}}"
