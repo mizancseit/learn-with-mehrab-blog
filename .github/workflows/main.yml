@@ -6,7 +6,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    environment: main
     services:
       mysql:
         image: mysql:8.0
@@ -77,11 +77,35 @@ jobs:
           cp -r app bootstrap config database public resources routes storage artisan composer.* .env.testing .env artifact/
           cp -r vendor node_modules artifact/ # optional if needed in artifact
 
-      - name: Upload Laravel Artifact
-        uses: actions/upload-artifact@v4
+      - name: Push Code
+        uses: appleboy/scp-action@master
         with:
-          name: laravel-app-artifact
-          path: artifact
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.HOST_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          source: "artifact/*"
+          target: "/var/www/html/learnwithmehrab.com/public_html/"
+          
+          
+         
+
+
+      # - name: Upload Laravel Artifact
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: laravel-app-artifact
+      #     path: artifact
+
+
+  # deploy:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Download Artificat
+      
+        
+    
+   
+          
         
 
         
