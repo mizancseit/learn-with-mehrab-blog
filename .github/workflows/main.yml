@@ -48,11 +48,11 @@ jobs:
       - name: Setup Environment Variable
         run: |
           echo "DB_CONNECTION=mysql" >> .env
-          echo "DB_HOST=127.0.0.1" >> .env
+          echo "DB_HOST=localhost" >> .env
           echo "DB_PORT=3306" >> .env
           echo "DB_DATABASE=laravel_test_db" >> .env
-          echo "DB_USERNAME=laravel_user" >> .env
-          echo "DB_PASSWORD=secrete" >> .env
+          echo "DB_USERNAME=root" >> .env
+          echo "DB_PASSWORD=admin" >> .env
 
           echo "DB_CONNECTION=mysql" >> .env.testing
           echo "DB_HOST=127.0.0.1" >> .env.testing
