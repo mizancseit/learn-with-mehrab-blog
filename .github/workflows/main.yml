@@ -71,11 +71,11 @@ jobs:
       - name: Execute Category Test
         run: php artisan test --env=testing
 
-      - name: Prepare Artifact Folder
-        run: |
-          mkdir -p artifact
-          cp -r app bootstrap config database public resources routes storage artisan composer.* .env.testing .env artifact/
-          cp -r vendor node_modules artifact/ # optional if needed in artifact
+      # - name: Prepare Artifact Folder
+      #   run: |
+      #     mkdir -p artifact
+      #     cp -r app bootstrap config database public resources routes storage artisan composer.* .env.testing .env artifact/
+      #     cp -r vendor node_modules artifact/ # optional if needed in artifact
 
       - name: Push Code
         uses: appleboy/scp-action@master
@@ -83,7 +83,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.HOST_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
-          source: "artifact/*"
+          source: "./*"
           target: "/var/www/html/learnwithmehrab.com/public_html/"
           
           
