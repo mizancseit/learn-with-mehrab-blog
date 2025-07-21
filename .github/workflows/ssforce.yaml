@@ -1,4 +1,4 @@
-name: Build Larabel Project
+name: Build Laravel Project
 
 on:
   workflow_dispatch:
@@ -85,3 +85,20 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           source: "./*"
           target: "/var/www/html/learnwithmehrab.com/public_html/"
+          
+          
+         
+
+
+      # - name: Upload Laravel Artifact
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: laravel-app-artifact
+      #     path: artifact
+
+
+  # deploy:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Download Artificat
+      
