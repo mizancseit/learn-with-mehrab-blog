@@ -58,8 +58,8 @@ jobs:
           echo "DB_HOST=127.0.0.1" >> .env.testing
           echo "DB_PORT=3306" >> .env.testing
           echo "DB_DATABASE=laravel_test_db" >> .env.testing
-          echo "DB_USERNAME=laravel_user" >> .env.testing
-          echo "DB_PASSWORD=secrete" >> .env.testing
+          echo "DB_USERNAME=root" >> .env.testing
+          echo "DB_PASSWORD=admin" >> .env.testing
 
 
       - name: Install dependencies
